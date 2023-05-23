@@ -4,9 +4,7 @@
       "name": "req",
       "route": "user/{userId}",
       "authLevel": "function",
-      "methods": [
-        "delete"
-      ],
+      "methods": ["delete"],
       "direction": "in",
       "type": "httpTrigger"
     },

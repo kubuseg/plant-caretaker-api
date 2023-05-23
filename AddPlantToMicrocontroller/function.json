@@ -4,9 +4,7 @@
       "name": "req",
       "route": "mc/{mcId}",
       "authLevel": "function",
-      "methods": [
-        "post"
-      ],
+      "methods": ["post"],
       "direction": "in",
       "type": "httpTrigger"
     },

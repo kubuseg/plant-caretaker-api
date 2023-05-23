@@ -4,9 +4,7 @@
       "name": "req",
       "route": "plants/{userId}",
       "authLevel": "function",
-      "methods": [
-        "get"
-      ],
+      "methods": ["get"],
       "direction": "in",
       "type": "httpTrigger"
     },

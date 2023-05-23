@@ -4,9 +4,7 @@
       "name": "req",
       "route": "user",
       "authLevel": "function",
-      "methods": [
-        "get"
-      ],
+      "methods": ["get"],
       "direction": "in",
       "type": "httpTrigger"
     },

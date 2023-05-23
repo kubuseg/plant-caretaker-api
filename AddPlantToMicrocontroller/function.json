@@ -1,0 +1,45 @@
+﻿{
+  "bindings": [
+    {
+      "name": "req",
+      "route": "mc/{mcId}",
+      "authLevel": "function",
+      "methods": [
+        "post"
+      ],
+      "direction": "in",
+      "type": "httpTrigger"
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "res"
+    },
+    {
+      "name": "users",
+      "databaseName": "plantsDB",
+      "collectionName": "Users",
+      "connectionStringSetting": "ItemsTrigger_ConnectionString",
+      "sqlQuery": "Select * from c where c.id = {userId}",
+      "direction": "in",
+      "type": "cosmosDB"
+    },
+    {
+      "connectionStringSetting": "ItemsTrigger_ConnectionString",
+      "name": "mcIn",
+      "databaseName": "plantsDB",
+      "collectionName": "Microcontrollers",
+      "sqlQuery": "Select * from c where c.id = {mcId}",
+      "direction": "in",
+      "type": "cosmosDB"
+    },
+    {
+      "name": "mcOut",
+      "direction": "out",
+      "type": "cosmosDB",
+      "connectionStringSetting": "ItemsTrigger_ConnectionString",
+      "databaseName": "plantsDB",
+      "collectionName": "Microcontrollers"
+    }
+  ]
+}

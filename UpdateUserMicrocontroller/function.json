@@ -1,0 +1,34 @@
+﻿{
+  "bindings": [
+    {
+      "name": "req",
+      "route": "mcId/{userId}",
+      "authLevel": "function",
+      "methods": ["post"],
+      "direction": "in",
+      "type": "httpTrigger"
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "res"
+    },
+    {
+      "name": "usersOut",
+      "direction": "out",
+      "type": "cosmosDB",
+      "connectionStringSetting": "ItemsTrigger_ConnectionString",
+      "databaseName": "plantsDB",
+      "collectionName": "Users"
+    },
+    {
+      "name": "usersIn",
+      "direction": "in",
+      "type": "cosmosDB",
+      "connectionStringSetting": "ItemsTrigger_ConnectionString",
+      "databaseName": "plantsDB",
+      "collectionName": "Users",
+      "sqlQuery": "Select * from c where c.id = {userId}"
+    }
+  ]
+}

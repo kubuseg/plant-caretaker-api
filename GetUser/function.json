@@ -1,0 +1,28 @@
+﻿{
+  "bindings": [
+    {
+      "name": "req",
+      "route": "user",
+      "authLevel": "function",
+      "methods": [
+        "get"
+      ],
+      "direction": "in",
+      "type": "httpTrigger"
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "res"
+    },
+    {
+      "name": "user",
+      "databaseName": "plantsDB",
+      "collectionName": "Users",
+      "connectionStringSetting": "ItemsTrigger_ConnectionString",
+      "sqlQuery": "Select * from c where c.username = {username} and c.password = {password}",
+      "direction": "in",
+      "type": "cosmosDB"
+    }
+  ]
+}

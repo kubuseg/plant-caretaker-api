@@ -1,0 +1,45 @@
+﻿{
+  "bindings": [
+    {
+      "name": "req",
+      "route": "user",
+      "authLevel": "function",
+      "methods": [
+        "post"
+      ],
+      "direction": "in",
+      "type": "httpTrigger"
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "res"
+    },
+    {
+      "name": "usersIn",
+      "databaseName": "plantsDB",
+      "collectionName": "Users",
+      "connectionStringSetting": "ItemsTrigger_ConnectionString",
+      "sqlQuery": "SELECT * FROM c ORDER BY c.id desc OFFSET 0 LIMIT 1",
+      "direction": "in",
+      "type": "cosmosDB"
+    },
+    {
+      "name": "usersOut",
+      "direction": "out",
+      "type": "cosmosDB",
+      "connectionStringSetting": "ItemsTrigger_ConnectionString",
+      "databaseName": "plantsDB",
+      "collectionName": "Users"
+    },
+    {
+      "name": "checkUsername",
+      "direction": "in",
+      "type": "cosmosDB",
+      "connectionStringSetting": "ItemsTrigger_ConnectionString",
+      "databaseName": "plantsDB",
+      "collectionName": "Users",
+      "sqlQuery": "Select * from c where c.username = {username}"
+    }
+  ]
+}

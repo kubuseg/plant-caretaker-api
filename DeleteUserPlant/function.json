@@ -1,0 +1,36 @@
+﻿{
+  "bindings": [
+    {
+      "name": "req",
+      "route": "plants/{userId}",
+      "authLevel": "function",
+      "methods": [
+        "delete"
+      ],
+      "direction": "in",
+      "type": "httpTrigger"
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "res"
+    },
+    {
+      "name": "usersIn",
+      "databaseName": "plantsDB",
+      "collectionName": "Users",
+      "connectionStringSetting": "ItemsTrigger_ConnectionString",
+      "sqlQuery": "Select * from c where c.id = {userId}",
+      "direction": "in",
+      "type": "cosmosDB"
+    },
+    {
+      "name": "usersOut",
+      "direction": "out",
+      "type": "cosmosDB",
+      "connectionStringSetting": "ItemsTrigger_ConnectionString",
+      "databaseName": "plantsDB",
+      "collectionName": "Users"
+    }
+  ]
+}

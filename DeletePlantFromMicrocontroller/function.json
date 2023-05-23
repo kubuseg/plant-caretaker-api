@@ -1,0 +1,36 @@
+﻿{
+  "bindings": [
+    {
+      "name": "req",
+      "route": "mc/{mcId}",
+      "authLevel": "function",
+      "methods": [
+        "delete"
+      ],
+      "direction": "in",
+      "type": "httpTrigger"
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "res"
+    },
+    {
+      "connectionStringSetting": "ItemsTrigger_ConnectionString",
+      "name": "mcIn",
+      "databaseName": "plantsDB",
+      "collectionName": "Microcontrollers",
+      "sqlQuery": "Select * from c where c.id = {mcId}",
+      "direction": "in",
+      "type": "cosmosDB"
+    },
+    {
+      "name": "mcOut",
+      "direction": "out",
+      "type": "cosmosDB",
+      "connectionStringSetting": "ItemsTrigger_ConnectionString",
+      "databaseName": "plantsDB",
+      "collectionName": "Microcontrollers"
+    }
+  ]
+}

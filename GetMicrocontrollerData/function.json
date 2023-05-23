@@ -1,0 +1,17 @@
+{
+  "bindings": [
+    {
+      "name": "req",
+      "route": "mcData/{mcId}",
+      "authLevel": "function",
+      "methods": ["get"],
+      "direction": "in",
+      "type": "httpTrigger"
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "res"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+﻿{
+  "bindings": [
+    {
+      "name": "req",
+      "route": "plants",
+      "authLevel": "function",
+      "methods": [
+        "get"
+      ],
+      "direction": "in",
+      "type": "httpTrigger"
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "res"
+    },
+    {
+      "name": "plants",
+      "databaseName": "plantsDB",
+      "collectionName": "Plants",
+      "connectionStringSetting": "ItemsTrigger_ConnectionString",
+      "direction": "in",
+      "type": "cosmosDB"
+    }
+  ]
+}

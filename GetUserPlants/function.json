@@ -1,0 +1,28 @@
+﻿{
+  "bindings": [
+    {
+      "name": "req",
+      "route": "plants/{userId}",
+      "authLevel": "function",
+      "methods": [
+        "get"
+      ],
+      "direction": "in",
+      "type": "httpTrigger"
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "res"
+    },
+    {
+      "connectionStringSetting": "ItemsTrigger_ConnectionString",
+      "name": "user",
+      "databaseName": "plantsDB",
+      "collectionName": "Users",
+      "sqlQuery": "Select * from c where c.id = {userId}",
+      "direction": "in",
+      "type": "cosmosDB"
+    }
+  ]
+}

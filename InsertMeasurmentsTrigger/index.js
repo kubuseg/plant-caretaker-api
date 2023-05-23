@@ -1,5 +1,5 @@
 module.exports = async function (context, req) {
-  const humidities = JSON.parse(req.body.humidities);
+  const humidities = req.body.humidities;
   const measurementsOut = [];
   const date = new Date().toISOString();
   for (i = 0; i < humidities.length; ++i) {

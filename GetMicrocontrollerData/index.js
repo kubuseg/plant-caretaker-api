@@ -3,7 +3,7 @@ const { CosmosClient } = require("@azure/cosmos");
 const getCriticalHumidity = (waterNeedsType) => {
   switch (waterNeedsType) {
     case "LOW":
-      return 30;
+      return 35;
     case "MEDIUM":
       return 40;
     case "HIGH":
@@ -107,7 +107,7 @@ module.exports = async function (context, req) {
       outData[sensorId]["fertelizationDaysElapsed"] = false;
     }
 
-    const baseWateringMl = 60;
+    const baseWateringMl = 40;
     const wateringMl =
       baseWateringMl *
       getWaterNeedsTypeMultiplier(plantData.waterNeedsType) *

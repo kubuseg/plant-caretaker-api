@@ -7,6 +7,6 @@ module.exports = async function (context) {
   plant.flowerpotSize = "SMALL";
   context.bindings.usersOut[0].plants.push(plant);
   context.res = {
-    body: { uuid: plant.uuid },
+    body: { plant },
   };
 };

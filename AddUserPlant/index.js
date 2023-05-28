@@ -1,8 +1,8 @@
 const crypto = require("crypto");
 
-module.exports = async function (context) {
+module.exports = async function (context, req) {
   context.bindings.usersOut = context.bindings.usersIn;
-  const plant = context.bindings.plant[0];
+  const plant = req.body.plant;
   plant.uuid = crypto.randomUUID();
   plant.flowerpotSize = "SMALL";
   context.bindings.usersOut[0].plants.push(plant);

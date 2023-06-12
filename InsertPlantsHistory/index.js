@@ -2,7 +2,6 @@ module.exports = async function (context, req) {
   const plantsHistoryOut = {
     dateTime: new Date().toISOString(),
     mcId: req.query.mcId,
-    sensorId: req.query.sensorId,
   };
   if (req.query.watering_ml) {
     plantsHistoryOut.watering_ml = Number(req.query.watering_ml);
@@ -10,5 +9,12 @@ module.exports = async function (context, req) {
   if (req.query.fertilizing_ml) {
     plantsHistoryOut.fertilizing_ml = Number(req.query.fertilizing_ml);
   }
-  context.bindings.plantsHistoryOut = JSON.stringify(plantsHistoryOut);
+
+  const plantsBySensors = context.bindings.mc[0].plantsBySensors;
+  const wateringLines = plantsBySensors.map((plant) => plant.wateringLine);
+  const index = wateringLines.indexOf(Number(req.query.sensorId));
+  if (index > -1) {
+    plantsHistoryOut.plantUUID = plantsBySensors[index].uuid;
+    context.bindings.plantsHistoryOut = JSON.stringify(plantsHistoryOut);
+  }
 };

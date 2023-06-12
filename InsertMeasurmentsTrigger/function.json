@@ -13,6 +13,15 @@
       "name": "res"
     },
     {
+      "connectionStringSetting": "ItemsTrigger_ConnectionString",
+      "name": "mc",
+      "databaseName": "plantsDB",
+      "collectionName": "Microcontrollers",
+      "sqlQuery": "Select * from c where c.id = {mcId}",
+      "direction": "in",
+      "type": "cosmosDB"
+    },
+    {
       "name": "outputDocument",
       "direction": "out",
       "type": "cosmosDB",

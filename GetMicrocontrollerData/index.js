@@ -51,14 +51,14 @@ module.exports = async function (context, req) {
 
   const { resources: lastWateringTimes } = await PlantsHistory.items
     .query(
-      `SELECT c.sensorId, MAX(c.dateTime) as lastWateringTime FROM c 
-        where c.mcId = '${context.bindingData.mcId}' and IS_DEFINED(c.watering_ml) group by c.sensorId`
+      `SELECT c.plantUUID, MAX(c.dateTime) as lastWateringTime FROM c 
+        where c.mcId = '${context.bindingData.mcId}' and IS_DEFINED(c.watering_ml) group by c.plantUUID`
     )
     .fetchAll();
   const { resources: lastFertilizationTimes } = await PlantsHistory.items
     .query(
-      `SELECT c.sensorId, MAX(c.dateTime) as lastFertelizationTimes FROM c 
-            where c.mcId = '${context.bindingData.mcId}' and IS_DEFINED(c.fertilizing_ml) group by c.sensorId`
+      `SELECT c.plantUUID, MAX(c.dateTime) as lastFertelizationTime FROM c 
+            where c.mcId = '${context.bindingData.mcId}' and IS_DEFINED(c.fertilizing_ml) group by c.plantUUID`
     )
     .fetchAll();
 
@@ -70,10 +70,9 @@ module.exports = async function (context, req) {
   const milisecondsInDay = 1000 * 3600 * 24;
   for (const plant of plantsBySensors) {
     const sensorId = plant.wateringLine;
-    const plantData = plant;
     outData[sensorId] = {};
     const lastWateringTime = lastWateringTimes?.find(
-      (object) => object.sensorId === sensorId
+      (object) => object.plantUUID === plant.uuid
     );
     context.log(lastWateringTime);
     if (lastWateringTime) {
@@ -81,16 +80,16 @@ module.exports = async function (context, req) {
         (new Date().getTime() - new Date(lastWateringTime).getTime()) /
         milisecondsInDay;
       outData[sensorId]["wateringDaysElapsed"] =
-        wateringDaysElapsed >= plantData["wateringIntervalInDays"];
+        wateringDaysElapsed >= plant["wateringIntervalInDays"];
     } else {
       outData[sensorId]["wateringDaysElapsed"] = false;
     }
 
-    [monthStart, monthEnd] = plantData["fertilizationMonthBetweenCondition"];
+    [monthStart, monthEnd] = plant["fertilizationMonthBetweenCondition"];
     const month = new Date().getMonth();
     if (monthStart <= month && month <= monthEnd) {
       const lastFertelizationTime = lastFertilizationTimes?.find(
-        (object) => object.sensorId === sensorId
+        (object) => object.plantUUID === plant.uuid
       );
       context.log(lastFertelizationTime);
       if (lastFertelizationTime) {
@@ -98,8 +97,7 @@ module.exports = async function (context, req) {
           (new Date().getTime() - new Date(lastFertelizationTime).getTime()) /
           milisecondsInDay;
         outData[sensorId]["fertelizationDaysElapsed"] =
-          fertelizationDaysElapsed >=
-          plantData["fertilizationIntervalInWeeks"] * 7;
+          fertelizationDaysElapsed >= plant["fertilizationIntervalInWeeks"] * 7;
       } else {
         outData[sensorId]["fertelizationDaysElapsed"] = true;
       }
@@ -110,17 +108,17 @@ module.exports = async function (context, req) {
     const baseWateringMl = 40;
     const wateringMl =
       baseWateringMl *
-      getWaterNeedsTypeMultiplier(plantData.waterNeedsType) *
-      getFlowerpotMultiplier(plantData.flowerpotSize);
+      getWaterNeedsTypeMultiplier(plant.waterNeedsType) *
+      getFlowerpotMultiplier(plant.flowerpotSize);
     outData[sensorId]["wateringMl"] = wateringMl;
     outData[sensorId]["criticalHumidity"] = getCriticalHumidity(
-      plantData.waterNeedsType
+      plant.waterNeedsType
     );
     const baseFertelizationMl = (baseWateringMl / 10.0) * 4.0;
     const fertelizationMl = Number(
       baseFertelizationMl *
-        getWaterNeedsTypeMultiplier(plantData.waterNeedsType) *
-        getFlowerpotMultiplier(plantData.flowerpotSize)
+        getWaterNeedsTypeMultiplier(plant.waterNeedsType) *
+        getFlowerpotMultiplier(plant.flowerpotSize)
     );
     outData[sensorId]["fertelizationMl"] = fertelizationMl;
   }

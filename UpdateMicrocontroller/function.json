@@ -2,9 +2,9 @@
   "bindings": [
     {
       "name": "req",
-      "route": "mcPlant/{mcId}",
+      "route": "mc/{mcId}",
       "authLevel": "function",
-      "methods": ["delete"],
+      "methods": ["patch"],
       "direction": "in",
       "type": "httpTrigger"
     },

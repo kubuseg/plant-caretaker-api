@@ -69,8 +69,8 @@ module.exports = async function (context, req) {
   const outData = {};
   const milisecondsInDay = 1000 * 3600 * 24;
   for (const plant of plantsBySensors) {
-    const sensorId = Object.keys(plant)[0];
-    const plantData = Object.values(plant)[0];
+    const sensorId = plant.wateringLine;
+    const plantData = plant;
     outData[sensorId] = {};
     const lastWateringTime = lastWateringTimes?.find(
       (object) => object.sensorId === sensorId

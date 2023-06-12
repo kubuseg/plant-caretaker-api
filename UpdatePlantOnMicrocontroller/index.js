@@ -4,6 +4,6 @@ module.exports = async function (context, req) {
   const userPlantsUUID = userPlants.map((plant) => plant.uuid);
   const index = userPlantsUUID.indexOf(req.body.plantUUID);
   if (index > -1) {
-    context.bindings.mcOut[0].plantsBySensors[index][req.body.sensorId] = userPlants[index];
+    context.bindings.mcOut[0].plantsBySensors[index] = userPlants[index];
   }
 };

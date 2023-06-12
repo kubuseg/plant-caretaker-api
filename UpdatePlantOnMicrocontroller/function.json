@@ -2,7 +2,7 @@
   "bindings": [
     {
       "name": "req",
-      "route": "mc/{mcId}",
+      "route": "mcPlant/{mcId}",
       "authLevel": "function",
       "methods": ["patch"],
       "direction": "in",

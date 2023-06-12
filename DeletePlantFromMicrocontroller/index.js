@@ -1,7 +1,7 @@
 module.exports = async function (context, req) {
   let plantsBySensors = context.bindings.mcIn[0].plantsBySensors;
   const sensors = plantsBySensors.map((plant) => plant.wateringLine);
-  const index = sensors.indexOf(req.query.sensor);
+  const index = sensors.indexOf(Number(req.query.sensor));
   if (index > -1) {
     plantsBySensors.splice(index, 1);
   }

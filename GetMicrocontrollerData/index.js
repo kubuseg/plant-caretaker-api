@@ -112,10 +112,17 @@ module.exports = async function (context, req) {
       baseWateringMl *
       getWaterNeedsTypeMultiplier(plantData.waterNeedsType) *
       getFlowerpotMultiplier(plantData.flowerpotSize);
+    outData[sensorId]["wateringMl"] = wateringMl;
     outData[sensorId]["criticalHumidity"] = getCriticalHumidity(
       plantData.waterNeedsType
     );
-    outData[sensorId]["wateringMl"] = wateringMl;
+    const baseFertelizationMl = (baseWateringMl / 10.0) * 4.0;
+    const fertelizationMl = Number(
+      baseFertelizationMl *
+        getWaterNeedsTypeMultiplier(plantData.waterNeedsType) *
+        getFlowerpotMultiplier(plantData.flowerpotSize)
+    );
+    outData[sensorId]["fertelizationMl"] = fertelizationMl;
   }
 
   context.res = {

@@ -3,9 +3,9 @@ const { CosmosClient } = require("@azure/cosmos");
 const getCriticalHumidity = (waterNeedsType) => {
   switch (waterNeedsType) {
     case "LOW":
-      return 35;
-    case "MEDIUM":
       return 40;
+    case "MEDIUM":
+      return 45;
     case "HIGH":
       return 50;
   }
@@ -49,13 +49,13 @@ module.exports = async function (context, req) {
   const { container: Microcontrollers } =
     await database.containers.createIfNotExists({ id: "Microcontrollers" });
 
-  const { resources: lastWateringTimes } = await PlantsHistory.items
+  const { resources: lastWateringTimeList } = await PlantsHistory.items
     .query(
       `SELECT c.plantUUID, MAX(c.dateTime) as lastWateringTime FROM c 
         where c.mcId = '${context.bindingData.mcId}' and IS_DEFINED(c.watering_ml) group by c.plantUUID`
     )
     .fetchAll();
-  const { resources: lastFertilizationTimes } = await PlantsHistory.items
+  const { resources: lastFertilizationTimeList } = await PlantsHistory.items
     .query(
       `SELECT c.plantUUID, MAX(c.dateTime) as lastFertelizationTime FROM c 
             where c.mcId = '${context.bindingData.mcId}' and IS_DEFINED(c.fertilizing_ml) group by c.plantUUID`
@@ -70,17 +70,20 @@ module.exports = async function (context, req) {
   const milisecondsInDay = 1000 * 3600 * 24;
   for (const plant of plantsBySensors) {
     const sensorId = plant.wateringLine;
+
     outData[sensorId] = {};
-    const lastWateringTime = lastWateringTimes?.find(
-      (object) => object.plantUUID === plant.uuid
-    );
-    context.log(lastWateringTime);
+
+    const { lastWateringTime: lastWateringTime } = {
+      ...lastWateringTimeList?.find(
+        (object) => object.plantUUID === plant.uuid
+      ),
+    };
     if (lastWateringTime) {
-      const wateringDaysElapsed =
+      const daysSinceWatering =
         (new Date().getTime() - new Date(lastWateringTime).getTime()) /
         milisecondsInDay;
       outData[sensorId]["wateringDaysElapsed"] =
-        wateringDaysElapsed >= plant["wateringIntervalInDays"];
+        daysSinceWatering >= plant["wateringIntervalInDays"];
     } else {
       outData[sensorId]["wateringDaysElapsed"] = false;
     }
@@ -88,16 +91,17 @@ module.exports = async function (context, req) {
     [monthStart, monthEnd] = plant["fertilizationMonthBetweenCondition"];
     const month = new Date().getMonth();
     if (monthStart <= month && month <= monthEnd) {
-      const lastFertelizationTime = lastFertilizationTimes?.find(
-        (object) => object.plantUUID === plant.uuid
-      );
-      context.log(lastFertelizationTime);
+      const { lastFertelizationTime: lastFertelizationTime } = {
+        ...lastFertilizationTimeList?.find(
+          (object) => object.plantUUID === plant.uuid
+        ),
+      };
       if (lastFertelizationTime) {
-        const fertelizationDaysElapsed =
+        const daysSinceFertelization =
           (new Date().getTime() - new Date(lastFertelizationTime).getTime()) /
           milisecondsInDay;
         outData[sensorId]["fertelizationDaysElapsed"] =
-          fertelizationDaysElapsed >= plant["fertilizationIntervalInWeeks"] * 7;
+          daysSinceFertelization >= plant["fertilizationIntervalInWeeks"] * 7;
       } else {
         outData[sensorId]["fertelizationDaysElapsed"] = true;
       }

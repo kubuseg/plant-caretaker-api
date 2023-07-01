@@ -1,0 +1,26 @@
+﻿{
+  "bindings": [
+    {
+      "name": "req",
+      "route": "plants/history/{plantUUID}",
+      "authLevel": "function",
+      "methods": ["get"],
+      "direction": "in",
+      "type": "httpTrigger"
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "res"
+    },
+    {
+      "connectionStringSetting": "ItemsTrigger_ConnectionString",
+      "name": "plantsHistory",
+      "databaseName": "plantsDB",
+      "collectionName": "PlantsHistory",
+      "sqlQuery": "Select * from c where c.plantUUID = {plantUUID}",
+      "direction": "in",
+      "type": "cosmosDB"
+    }
+  ]
+}
